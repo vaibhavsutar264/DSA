@@ -2079,3 +2079,130 @@ animalInstance.dequeueDog()
 animalInstance.dequeueCat()
 
 console.log(animalInstance,"animalInstance")
+
+
+//magic number DP
+
+//Given the array [-1, 0, 1, 2, 4, 10], the magic index is 4 because A[4] = 4.
+
+function magicNumberHelper(arr,start,end,dp){
+  if(start > end){
+    return 
+  }
+   let mid = Math.floor((start+end)/2)
+   console.log(mid,arr[mid])
+   if(dp[mid] !== -1){
+    return dp[mid]
+   }
+   if(arr[mid] == mid){
+    return mid
+   }else if(arr[mid] > mid){
+    return dp[mid] = magicNumberHelper(arr,start,mid-1,dp)
+   }else if(arr[mid] < mid){
+    return dp[mid] = magicNumberHelper(arr,mid+1,end,dp)
+   }
+}
+
+function magicNumber(arr) {
+  let dp = new Array(arr.length).fill(-1)
+  return magicNumberHelper(arr,0,arr.length-1,dp)
+}
+console.log(magicNumber([-1, 0, 1, 2, 3, 5]), "magicNumber");
+
+
+function recursiveMultiplyHelper(smaller,bigger){
+  if(smaller == 0) return 0
+  if(smaller == 1) return bigger
+  let mid = Math.floor(smaller/2)
+  //ha function to prent aat made jato jo prent smaller ==1 chi condition hit hote ani jevha hi condition hit hote tevha mg te return bigger krte
+  let halfProduct = recursiveMultiplyHelper(mid,bigger)
+  if(smaller %2 == 0){
+    //jr value even asen tr halfProduct 2 vela return karaycha half + half = full
+    return halfProduct + halfProduct
+  }else{
+    //jr value odd asen tr mg half+half+bigger cha value karan value odd ahe 
+    return halfProduct + halfProduct +bigger
+  }
+}
+
+function recursiveMultiply(num1,num2) {
+  let smaller = num1>num2 ? num2 : num1
+  let bigger = num1>num2 ? num1 : num2
+  return recursiveMultiplyHelper(smaller,bigger)
+}
+console.log(recursiveMultiply(8,9), "recursiveMultiply");
+//output is 72
+
+
+
+function getPermutations(str) {
+  // Base case: if the string is empty, return an array with an empty string
+  if (str.length === 0) {
+      return [''];
+  }
+
+  // Array to store all permutations
+  let permutations = [];
+
+  // Iterate over each character in the string
+  for (let i = 0; i < str.length; i++) {
+      // Extract the current character
+      let char = str[i]; //a
+
+      // Form the remaining substring by excluding the current character
+      let remaining = str.slice(0,i) + str.slice(i+1,str.length)
+      //  console.log(remaining,"remaining")
+      
+      // Recursively get permutations of the remaining substring
+      let remainingPermutations = getPermutations(remaining);
+      // console.log(remainingPermutations,"remainingPermutations")
+      //bc //cb //here inside of this remainingPermutations b is char and its remainingPermutation was only the c so in inside forloop for b it has been added with by char +perm = bc and if you talk about cb it is due to 2 for loop ran let i=0;i<str.length thats why 
+
+      // Append the current character to each permutation of the remaining characters
+      for (let perm of remainingPermutations) {
+          permutations.push(char + perm); //abc ,acb
+
+      }
+  }
+
+  return permutations;
+}
+
+
+
+// Example usage
+console.log(getPermutations("abc"),"getPermutations");
+
+function permuteUnique(nums) {
+  const results = [];
+  nums.sort(); // Sort to handle duplicates
+
+  function backtrack(path, used) {
+      if (path.length === nums.length) {
+          results.push([...path]);
+          return;
+      }
+
+      for (let i = 0; i < nums.length; i++) {
+          if (used[i]) continue; // Skip used elements
+          if (i > 0 && nums[i] === nums[i - 1] && !used[i - 1]) continue; // Skip duplicates
+          //standard backtrack method 
+          path.push(nums[i]);
+          used[i] = true;
+          backtrack(path, used);
+          path.pop();
+          used[i] = false;
+      }
+  }
+
+  backtrack([], Array(nums.length).fill(false));
+  return results;
+}
+
+
+// Example usage
+console.log(permuteUnique(['a', 'a', 'b']),"permuteUnique");
+
+
+
+
