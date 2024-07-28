@@ -2205,4 +2205,41 @@ console.log(permuteUnique(['a', 'a', 'b']),"permuteUnique");
 
 
 
+function mergeSortAlgorithm(arr) {
+  // if(arr.length == 0) return 
+  if(arr.length == 1) return arr
+  let mid = Math.floor(arr.length/2)
+  let left = mergeSortAlgorithm(arr.slice(0,mid))
+  let right = mergeSortAlgorithm(arr.slice(mid))
+  return mergeBoth(left,right)
+}
+
+function mergeBoth(left,right) {
+  let sortedArray = []
+  while(left.length && right.length){
+    if(left[0] >= right[0]){
+      sortedArray.push(right.shift())
+    }else{
+      sortedArray.push(left.shift())
+    }
+  }
+  return [...sortedArray,...left,...right]
+}
+
+
+
+// Example usage
+console.log(mergeSortAlgorithm([8,3,5,4,7,6,1,2]),"mergeSortAlgorithm");
+//[
+//   1,
+//   2,
+//   3,
+//   4,
+//   5,
+//   6,
+//   7,
+//   8
+// ]
+
+
 
